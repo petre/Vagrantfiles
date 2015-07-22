@@ -23,6 +23,13 @@ Vagrant.configure(2) do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 9200, host: 9200
+  config.vm.network :forwarded_port, guest: 9201, host: 9201
+  config.vm.network :forwarded_port, guest: 9202, host: 9202
+  config.vm.network :forwarded_port, guest: 9203, host: 9203
+  config.vm.network :forwarded_port, guest: 2000, host: 2000
+  config.vm.network :forwarded_port, guest: 4567, host: 4567
+  config.vm.network :forwarded_port, guest: 9000, host: 9000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -50,6 +57,10 @@ Vagrant.configure(2) do |config|
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
   # end
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 4
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -69,10 +80,18 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
   config.vm.provision "shell", inline: <<-SHELL
+    # disable selinux
+    sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+    sudo echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+    sudo echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
     sudo yum upgrade -y
     sudo yum install -y telnet
+    sudo yum install -y htop
     sudo yum install -y vim
+    sudo yum install -y git
     sudo yum install -y epel-release
     sudo yum install -y docker-io
+    sudo usermod -a -G docker vagrant
   SHELL
+
 end
