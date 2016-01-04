@@ -1,9 +1,0 @@
-DEPENDENCIES
-  apt (~> 2.9.2)
-  base
-    path: cookbooks/base
-
-GRAPH
-  apt (2.9.2)
-  base (1.0.0)
-    apt (>= 0.0.0)
