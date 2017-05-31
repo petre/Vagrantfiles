@@ -6,24 +6,10 @@ ruby_block "insert_line" do
   end
 end
 
-cookbook_file "/etc/yum.repos.d/docker.repo" do
-  source "docker.repo"
-    mode 0644
-    owner "root"
-    group "root"
-end
+include_recipe 'yum-epel'
 
-packages = ['telnet', 'htop', 'vim', 'yum-utils', 'net-tools', 'docker-engine' ]
+packages = ['telnet', 'vim', 'yum-utils', 'net-tools', 'htop']
 
 packages.each do |p|
   package p
-end
-
-service 'docker' do
-  supports :restart => true, :status => true, :reload => true
-  action [:enable, :start]
-end
-
-group 'docker' do
-  members ['vagrant']
 end

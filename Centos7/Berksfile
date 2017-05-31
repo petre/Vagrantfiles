@@ -1,0 +1,4 @@
+source "https://supermarket.chef.io"
+
+cookbook 'yum-epel', '~> 0.6.5'
+cookbook 'base', path: "./cookbooks/base"
